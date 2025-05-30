@@ -1,0 +1,39 @@
+name: Lint and Test workflow
+
+# Trigger workflow on all pull requests to develop or staging
+on:
+  pull_request:
+    branches:
+      - develop
+      - staging
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repo code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Setup Node.js (stable version)
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      # Install dependencies
+      - name: 🧰 Install Deps
+        run: npm install
+
+      # Run linter
+      - name: 🧹 Run Lint
+        run: npm run lint
+
+      # Optional: Run TypeScript build check
+      - name: 🏗️ Type Check and Build
+        run: npm run build
+
+      # Run tests with Vitest in CI mode
+      - name: 🧪 Run Tests
+        run: npm run test -- --run
